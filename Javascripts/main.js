@@ -23,7 +23,7 @@ $(function() {
     $(document).keydown(function(e) {
         var myPosition = $('.me').css('left');
         myPosition = myPosition.replace(/[^0-9]/g, '');
-        // console.log(myPosition);
+        console.log(myPosition);
         if(e.which == 37 && myPosition > 19) {
             console.log("left pressed");
             $('.me').animate({left: "-=20"}, 10);
@@ -33,7 +33,7 @@ $(function() {
     $(document).keydown(function(e) {
         var myPosition = $('.me').css('left');
         myPosition = myPosition.replace(/[^0-9]/g, '');
-        // console.log(myPosition);
+        console.log(myPosition);
         if(e.which == 39 && myPosition < 581) {
             console.log("right pressed");
             $('.me').animate({left: "+=20"}, 10);
