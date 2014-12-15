@@ -21,15 +21,20 @@ $(function() {
 
     //4. Move our main hero (me)
     $(document).keydown(function(e) {
-        console.log(e);
-        if(e.which == 37) {
+        var myPosition = $('.me').css('left');
+        myPosition = myPosition.replace(/[^0-9]/g, '');
+        console.log(myPosition);
+        if(e.which == 37 && myPosition > 19) {
             console.log("left pressed");
             $('.me').animate({left: "-=20"}, 10);
         }
     });
 
     $(document).keydown(function(e) {
-        if(e.which == 39) {
+        var myPosition = $('.me').css('left');
+        myPosition = myPosition.replace(/[^0-9]/g, '');
+        console.log(myPosition);
+        if(e.which == 39 && myPosition < 581) {
             console.log("right pressed");
             $('.me').animate({left: "+=20"}, 10);
         }
