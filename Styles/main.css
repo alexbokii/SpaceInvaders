@@ -47,12 +47,24 @@ td img {
     position: relative;
     width: 600px;
     margin: 0 auto;
+    padding-top: 100px;
 }
 
 .me {
-    margin-top: 100px;
     width: 30px;
     height: 10px;
     background-color: #67FE56;
     position: relative;
+}
+
+
+
+/*----------------------Styles for new objexts-------------*/
+.gunfire {
+    height: 20px;
+    width: 5px;
+    background-color: #C7B1B1;
+    position: relative;
+    /*z-index: 100;*/
+    margin-left: 12px;
 }
