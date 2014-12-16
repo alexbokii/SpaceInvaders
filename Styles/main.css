@@ -63,6 +63,7 @@ td img {
 .gunfire {
     height: 20px;
     width: 5px;
+    top: 1px;
     background-color: #C7B1B1;
     position: relative;
     /*z-index: 100;*/
