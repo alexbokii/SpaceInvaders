@@ -1,10 +1,28 @@
 $(function() {
-    // GENERAL FUNCTIONS
+    // GENERAL FUNCTIONS AND VARIABLES
     function receiveNumberFromString(string) {
         var number = string.replace(/[^0-9]/g, '');
         return number;
     }
 
+    var map = [[1,1,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1]];
+
+    function showAliens(map) {
+        for(var i = 0; i < map.length; i++) {
+            $('.aliens-container').append('<div class="row' + i +'"></div>');
+            $.each(map[i], function(value) {
+                if(value != 0) {
+                    $('.row' + i).append('<div class="alien"></div>')
+                }
+            });
+        } 
+    }
+
+    showAliens(map);
 
     // KEY EVENTS
     //load game from landing page
@@ -30,6 +48,7 @@ $(function() {
             $('.me').animate({left: "+=20"}, 10);
         }
     });
+
     //make a shot
     $(document).keypress(function(e) {
         if(e.which == 32) {
@@ -40,11 +59,11 @@ $(function() {
 
 
     //1. Add alien to every cell
-    $('td').html('<img src="../alien1.png">');
+    $(".alien").html('<img src="../alien1.png">');
 
     //2. Add moving of alliens
-    (function moveAllien() {
-        $('td img').animate({ left: "+=30" }, 3000)
+    var moveAllien = (function () {
+        $('.alien img').animate({ left: "+=30" }, 3000)
                     .animate({ top: "+=10" }, 2000)
                     .animate({left: "-=20", top: "-=10"}, 2000);
     })();
@@ -82,3 +101,7 @@ $(function() {
     }
  
 });
+
+
+// Questions:
+// 1. Why browser gets picture from home folder

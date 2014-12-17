@@ -22,24 +22,28 @@ body {
     overflow: hidden;
 }
 
-table {
+.aliens-container {
+    overflow: hidden;
     width: 600px;
     margin: 0 auto;
-    overflow: hidden;
-    border-spacing: 0;
 }
 
-td {
-    width: 20px;
-    height: 50px;
-    border: 1px solid #3A2E2E;
+.row0, .row1, .row2, .row3, .row4 {
+    overflow: hidden;
+    width: 100%;
+}
+
+.alien {
+    width: 54px;
+    height: 54px;
+    border: 1px solid #282626;
+    float: left;
     position: relative;
 }
 
-td img {
-    width: 20px;
-    height: 20px;
-    display: block;
+.alien img {
+    width: 30px;
+    height: 30px;
     position: relative;
 }
 
