@@ -5,6 +5,8 @@ $(function() {
         score: 0
     }
 
+    var bulletOffset;
+
     function receiveNumberFromString(string) {
         var number = string.replace(/[^0-9]/g, '');
         return number;
@@ -98,13 +100,23 @@ $(function() {
             console.log(checkIfHitAlien());
             if(checkIfHitAlien()) {
                 $('.gunfire').animate({top: "-=10"}, 10);
+                bulletOffset = $('.gunfire').offset();
+                console.log(bulletOffset);
             }
             else {
                 clearInterval(bulletMoving);
             }
         }, 500);
     }
- 
+
+    //4. Check if bullet has the same position as alian
+    (function checkAlienPosition() {
+        $('.alien').each(function(index) {
+            var alienOffset = $(this).offset();
+            console.log(alienOffset);
+        });
+    })();
+  
 });
 
 
