@@ -1,5 +1,10 @@
 $(function() {
     // GENERAL FUNCTIONS AND VARIABLES
+    var defender = {
+        lives: 3,
+        score: 0
+    }
+
     function receiveNumberFromString(string) {
         var number = string.replace(/[^0-9]/g, '');
         return number;
@@ -14,9 +19,9 @@ $(function() {
     function showAliens(map) {
         for(var i = 0; i < map.length; i++) {
             $('.aliens-container').append('<div class="row' + i +'"></div>');
-            $.each(map[i], function(value) {
+            $.each(map[i], function(index, value) {
                 if(value != 0) {
-                    $('.row' + i).append('<div class="alien"></div>')
+                    $('.row' + i).append('<div class="alien column' + index +'"></div>');
                 }
             });
         } 
