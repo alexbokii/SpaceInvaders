@@ -109,6 +109,7 @@ $(function() {
             }
             else {
                 renewPositionOfAlien();
+                compareBulletsAndAliensPosition();
                 clearInterval(bulletMoving);
             }
         }, 500);
@@ -136,6 +137,28 @@ $(function() {
             var domEl = $("."+ el[0] + " " + "." + el[1]);
             var domElPosition = $(domEl).offset();
             aliens[alien] = domElPosition;
+        }
+    }
+
+    //6. Compare bullet position and alien position
+    function compareBulletsAndAliensPosition() {
+        for(var alien in aliens) {
+            var enemyOffset = aliens[alien];
+
+            enemyPositionTop = [];
+            for(var i = enemyOffset.top; i <= enemyOffset.top+ 54; i++) {
+                enemyPositionTop.push(i);
+            }
+
+            enemyPositionLeft = [];
+            for(var i = enemyOffset.left; i <= enemyOffset.left+ 54; i++) {
+                enemyPositionLeft.push(i);
+            }
+
+            console.log(enemyOffset, bulletOffset, enemyPositionTop, enemyPositionLeft);
+            if(enemyOffset == bulletOffset) {
+                console.log("ENEMY IS KILLED!");
+            }
         }
     }
   
