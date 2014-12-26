@@ -5,6 +5,9 @@ $(function() {
         score: 0
     }
 
+    var aliens = {};
+
+
     var bulletOffset;
 
     function receiveNumberFromString(string) {
@@ -113,9 +116,26 @@ $(function() {
     (function checkAlienPosition() {
         $('.alien').each(function(index) {
             var alienOffset = $(this).offset();
-            console.log(alienOffset);
+            // console.log(alienOffset);
         });
     })();
+
+    //5. Create object for every alien and check their positions on the page
+    $('.aliens-container div.alien').each(function() {
+        var parent = $(this).parent().attr();
+        console.log(parent);
+        var attr = $(this).attr('class').split(' ')[1];
+        var position = $(this).offset();
+
+        Object.defineProperty(aliens, attr, {
+            get: function(){ return position;}
+            });
+
+        console.log(aliens);
+
+        // aliens.attr = position;
+        // console.log(aliens);
+    });
   
 });
 
