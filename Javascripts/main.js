@@ -72,13 +72,14 @@ $(function() {
     $(".alien").html('<img src="../alien1.png">');
 
     //2. Add moving of alliens
-    var moveAllien = (function () {
-        $('.alien img').animate({ left: "+=30" }, 3000)
+    var moveAllien = function () {
+        console.log("calling moveAlien");
+        $('.alien').animate({ left: "+=30" }, 3000)
                     .animate({ top: "+=10" }, 2000)
                     .animate({left: "-=20", top: "-=10"}, 2000);
-    })();
+    };
 
-    setInterval(moveAllien, 7000);
+    var moveAliensID = setInterval(moveAllien,7000);
 
     //3. Create shooting function for defender
     function makeDefenderShot() {
@@ -89,7 +90,7 @@ $(function() {
 
     var checkIfHitAlien = function() {
         var position = parseInt($('.gunfire').css('top'), 10);
-        console.log(position);
+        // console.log(position);
         if(position > -100) {
             return true;
         }
@@ -107,6 +108,7 @@ $(function() {
                 console.log(bulletOffset);
             }
             else {
+                renewPositionOfAlien();
                 clearInterval(bulletMoving);
             }
         }, 500);
@@ -116,26 +118,26 @@ $(function() {
     (function checkAlienPosition() {
         $('.alien').each(function(index) {
             var alienOffset = $(this).offset();
-            // console.log(alienOffset);
         });
     })();
 
     //5. Create object for every alien and check their positions on the page
     $('.aliens-container div.alien').each(function() {
-        var parent = $(this).parent().attr();
-        console.log(parent);
+        var parent = $(this).parent().attr('class');
         var attr = $(this).attr('class').split(' ')[1];
         var position = $(this).offset();
-
-        Object.defineProperty(aliens, attr, {
-            get: function(){ return position;}
-            });
-
-        console.log(aliens);
-
-        // aliens.attr = position;
-        // console.log(aliens);
+        var newAlien = parent+attr;
+        aliens[parent+"-"+attr] = position;
     });
+
+    function renewPositionOfAlien() {
+        for(var alien in aliens) {
+            var el = alien.split("-");
+            var domEl = $("."+ el[0] + " " + "." + el[1]);
+            var domElPosition = $(domEl).offset();
+            aliens[alien] = domElPosition;
+        }
+    }
   
 });
 
