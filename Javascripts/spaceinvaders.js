@@ -1,17 +1,8 @@
 $(function() {
-    // var defender = {
-    //     lives: 3,
-    //     score: 0
-    // }
-
     var aliens = {};
     var bulletOffset;
-
-    function receiveNumberFromString(string) {
-        var number = string.replace(/[^0-9]/g, '');
-        return number;
-    }
-
+    var enemyPositionTop = [];
+    var enemyPositionLeft = [];
     var map = [[1,1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1,1],
@@ -30,11 +21,12 @@ $(function() {
     }
     showAliens(map);
 
-    // KEY EVENTS
-    //load game from landing page
-    $('.landing').keypress(function(){
-        location.href='file:///Users/alexbokii/Documents/coding/SpaceInvaders/game.html';
-    });
+    $(".alien").html('<img src="../alien1.png">');
+
+    function receiveNumberFromString(string) {
+        var number = string.replace(/[^0-9]/g, '');
+        return number;
+    }
 
     // move defender
     $(document).keydown(function(e) {
@@ -63,62 +55,17 @@ $(function() {
         }
     });
 
-
-    //1. Add alien to every cell
-    $(".alien").html('<img src="../alien1.png">');
-
-    //2. Add moving of alliens
-    var moveAllien = function () {
+    // moveAlien
+    var moveAlien = function () {
         console.log("calling moveAlien");
-        $('.alien').animate({ left: "+=30" }, 3000)
-                    .animate({ top: "+=10" }, 2000)
-                    .animate({left: "-=20", top: "-=10"}, 2000);
+        $('.alien').animate({ left: "+=380" }, 15000)
+                    .animate({ top: "+=20" }, 5000)
+                    .animate({left: "-=380"}, 15000);
     };
+    moveAlien();
+    var moveAliensID = setInterval(moveAlien,35000);
 
-    var moveAliensID = setInterval(moveAllien,7000);
-
-    //3. Create shooting function for defender
-    function makeDefenderShot() {
-        var gunfire = "<div class='gunfire'></div>";
-        $('.me').append(gunfire);
-        moveBulletOfDefender($('.gunfire'));
-    }
-
-    var checkIfHitAlien = function() {
-        var position = parseInt($('.gunfire').css('top'), 10);
-        // console.log(position);
-        if(position > -100) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
-
-    function moveBulletOfDefender(el) {
-        var bulletMoving = setInterval(function() {
-            console.log(checkIfHitAlien());
-            if(checkIfHitAlien()) {
-                $('.gunfire').animate({top: "-=10"}, 10);
-                bulletOffset = $('.gunfire').offset();
-                console.log(bulletOffset);
-            }
-            else {
-                renewPositionOfAlien();
-                outlineAlienArea();
-                clearInterval(bulletMoving);
-            }
-        }, 500);
-    }
-
-    //4. Check if bullet has the same position as alian
-    (function checkAlienPosition() {
-        $('.alien').each(function(index) {
-            var alienOffset = $(this).offset();
-        });
-    })();
-
-    //5. Create object for every alien and check their positions on the page
+    // create big object of aliens
     $('.aliens-container div.alien').each(function() {
         var parent = $(this).parent().attr('class');
         var attr = $(this).attr('class').split(' ')[1];
@@ -126,6 +73,8 @@ $(function() {
         var newAlien = parent+attr;
         aliens[parent+"-"+attr] = position;
     });
+
+    console.log(Object.keys(aliens).length);
 
     function renewPositionOfAlien() {
         for(var alien in aliens) {
@@ -136,35 +85,69 @@ $(function() {
         }
     }
 
-    //6. Compare bullet position and alien position
     function outlineAlienArea() {
         for(var alien in aliens) {
             var enemyOffset = aliens[alien];
 
-            var enemyPositionTop = [];
+            enemyPositionTop = [];
             for(var i = parseInt(enemyOffset.top); i <= enemyOffset.top+ 54; i++) {
                 enemyPositionTop.push(i);
             }
 
-            var enemyPositionLeft = [];
+            enemyPositionLeft = [];
             for(var i = parseInt(enemyOffset.left); i <= enemyOffset.left+ 54; i++) {
                 enemyPositionLeft.push(i);
             }
         }
-
-        checkIfBulletIsInAlienArea(enemyPositionTop);
     }
 
-    function checkIfBulletIsInAlienArea(enemyPositionTop) {
-        for(var i = 0; i < enemyPositionTop.length; i++) {
+    // gun
+    function makeDefenderShot() {
+        var gunfire = "<div class='gunfire'></div>";
+        $('.me').append(gunfire);
+        moveBulletOfDefender($('.gunfire'));
+    }
+
+    function moveBulletOfDefender(el) {
+        var bulletMoving = setInterval(function() {
+            renewPositionOfAlien();
+            outlineAlienArea();
+            bulletOffset = $('.gunfire').offset();
+            if(!checkIfHitAlien()) {
+                $('.gunfire').animate({top: "-=20"}, 10);
+                renewPositionOfAlien();
+                outlineAlienArea();
+                bulletOffset = $('.gunfire').offset();
+                console.log(bulletOffset);
+            }
+            else {
+                // renewPositionOfAlien();
+                // outlineAlienArea();
+                clearInterval(bulletMoving);
+            }
+        }, 500);
+    }
+
+    function checkIfHitAlien() {
+        // console.log(Object.keys(aliens).length, bulletOffset.top, enemyPositionTop);
+        console.log(aliens, enemyPositionTop[3]);
+        for(var i = 0; i < Object.keys(aliens).length; i++) {
+            console.log(enemyPositionTop[i]);
             if(bulletOffset.top == enemyPositionTop[i]) {
                 console.log("Enemy is -");
+                for (var i = 0; i < Object.keys(aliens).length; i++) {
+                    if(bulletOffset.left == enemyPositionLeft[i]) {
+                        console.log("WIN");
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+            else {
+                return false;
             }
         }
     }
-  
 });
-
-
-// Questions:
-// 1. Why browser gets picture from home folder

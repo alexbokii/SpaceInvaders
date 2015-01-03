@@ -24,8 +24,8 @@ body {
 
 .aliens-container {
     overflow: hidden;
-    width: 600px;
-    margin: 0 auto;
+    /*width: 600px;*/
+    /*margin: 0 auto;*/
 }
 
 .row0, .row1, .row2, .row3, .row4 {
@@ -49,9 +49,9 @@ body {
 
 .me-container {
     position: relative;
-    width: 600px;
-    margin: 0 auto;
-    padding-top: 100px;
+    /*width: 600px;*/
+    /*margin: 0 auto;*/
+    padding-top: 200px;
 }
 
 .me {
