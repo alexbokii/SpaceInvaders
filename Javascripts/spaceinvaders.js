@@ -1,4 +1,6 @@
 $(function() {
+    var activeDefenderShot = false;
+    // var ifHit = false;
 
     // 1
     var aliens = [[{'class':'c1r1'},{'class':'c1r2'},{'class':'c1r3'}],
@@ -74,12 +76,15 @@ $(function() {
     //make a shot
     $(document).keypress(function(e) {
         if(e.which == 32) {
-            createDefenderShot();
+            if(!activeDefenderShot) {
+                createDefenderShot();
+            }
         }
     });
 
     // 5
     function createDefenderShot() {
+        activeDefenderShot = true;
         $('.defender').append("<div class='gunfire'></div>");
         var timerMoveDEfenderBullet = setInterval(function() {
             $('.gunfire').css({'top': "-=1"});
@@ -87,32 +92,57 @@ $(function() {
                 console.log("Alien is killed");
                 clearInterval(timerMoveDEfenderBullet);
                 $('.gunfire').remove();
+                activeDefenderShot = false;
             }
-        }, 1);
-        
+        }, 1);  
     }
 
     function checkIfAlienIsHit() {
         var bulletPosition = $('.gunfire').offset();
-        var bulletTop = bulletPosition.top;
-        var bulletLeft = bulletPosition.left;
-
         calculateAlienCurrentPosition(aliens);
+        // ifHit = false;
+        var num = 1;
+        
+        for (var i = 0; i < aliens.length; i++) {
+            var lastRow = calcualteAliensRowCoordinates(num);
+            var isHit = comparePositions(lastRow, bulletPosition, num);
+            console.log(isHit);
+            if(isHit != false) {
+                $('.' + isHit + '').html('').css('border', '1px solid red');
+                return true;
+            }
+            num++;
+        }
+    }
+
+    function calcualteAliensRowCoordinates(num) {
+        var lastRow = [];
 
         for(var i = 0; i < aliens.length; i++) {
-            var lastAlienTop = parseInt(aliens[i][aliens[i].length - 1].position.top);
-            var lastAlienLeft = parseInt(aliens[i][aliens[i].length - 1].position.left);
+            var lastAlien = aliens[i][aliens[i].length - num];
+            lastRow.push(lastAlien);
         }
-        if(bulletTop == lastAlienTop + 50) {
-            for(var i = 0; i < aliens.length; i++) {
-                var lastAlien = aliens[i].length - 1;
-                if(bulletLeft == aliens[i][lastAlien].position.left || bulletLeft > aliens[i][lastAlien].position.left && bulletLeft < aliens[i][lastAlien].position.left + 50) {
-                    $('.' + aliens[i][lastAlien].class + '').html('');
-                    return true;
+        return lastRow;
+    }
+
+    function comparePositions(lastRow, bulletPosition, num) {
+        var bulletTop = bulletPosition.top;
+        var bulletLeft = bulletPosition.left;
+        console.log(lastRow[0].position);
+
+        for(var i = 0; i < lastRow.length; i++) {
+            if(bulletTop === lastRow[i].position.top + 50) {
+                for(var j = 0; j < lastRow.length; j++) {
+                    if(bulletLeft == lastRow[j].position.left ||
+                        bulletLeft > lastRow[j].position.left && bulletLeft < lastRow[j].position.left + 50) {
+                        var killedAlien = lastRow[j].class;                        
+                        console.log(aliens);
+                        return killedAlien;
+                    }
                 }
             }
         }
-
+        return false;
     }
         
 
