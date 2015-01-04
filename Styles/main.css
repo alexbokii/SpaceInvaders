@@ -23,38 +23,31 @@ body {
 }
 
 .aliens-container {
-    overflow: hidden;
-    /*width: 600px;*/
-    /*margin: 0 auto;*/
+    width: 350px;
+    height: 150px;
+    position: relative;
 }
 
-.row0, .row1, .row2, .row3, .row4 {
-    overflow: hidden;
-    width: 100%;
-}
-
-.alien {
-    width: 54px;
-    height: 54px;
-    border: 1px solid #282626;
+.aliens-container > div {
+    width: 50px;
+    height: 50px;
     float: left;
-    position: relative;
 }
 
-.alien img {
-    width: 30px;
-    height: 30px;
-    position: relative;
+.aliens-container > div img {
+    width: 100%;
+    height: 100%;
+    /*position: relative;*/
 }
 
-.me-container {
+.defender-container {
     position: relative;
     /*width: 600px;*/
     /*margin: 0 auto;*/
     padding-top: 200px;
 }
 
-.me {
+.defender {
     width: 30px;
     height: 10px;
     background-color: #67FE56;
