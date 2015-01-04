@@ -32,9 +32,7 @@ $(function() {
 
     // KEY EVENTS
     //load game from landing page
-    $('.landing').keypress(function(){
-        location.href='file:///Users/alexbokii/Documents/coding/SpaceInvaders/game.html';
-    });
+   
 
     // move defender
     $(document).keydown(function(e) {
@@ -97,7 +95,7 @@ $(function() {
 
     function moveBulletOfDefender(el) {
         var bulletMoving = setInterval(function() {
-            console.log(checkIfHitAlien());
+            // console.log(checkIfHitAlien());
             if(checkIfHitAlien()) {
                 $('.gunfire').animate({top: "-=10"}, 10);
                 bulletOffset = $('.gunfire').offset();
@@ -112,11 +110,11 @@ $(function() {
     }
 
     //4. Check if bullet has the same position as alian
-    (function checkAlienPosition() {
-        $('.alien').each(function(index) {
-            var alienOffset = $(this).offset();
-        });
-    })();
+    // (function checkAlienPosition() {
+    //     $('.alien').each(function(index) {
+    //         var alienOffset = $(this).offset();
+    //     });
+    // })();
 
     //5. Create object for every alien and check their positions on the page
     $('.aliens-container div.alien').each(function() {
@@ -144,14 +142,17 @@ $(function() {
             var enemyPositionTop = [];
             for(var i = parseInt(enemyOffset.top); i <= enemyOffset.top+ 54; i++) {
                 enemyPositionTop.push(i);
+                enemyOffset.push(enemyPositionTop);
             }
 
             var enemyPositionLeft = [];
             for(var i = parseInt(enemyOffset.left); i <= enemyOffset.left+ 54; i++) {
                 enemyPositionLeft.push(i);
+                enemyOffset.push(enemyPositionLeft);
             }
         }
 
+        console.log(alien);
         checkIfBulletIsInAlienArea(enemyPositionTop);
     }
 

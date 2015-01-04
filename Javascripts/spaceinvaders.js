@@ -1,25 +1,35 @@
 $(function() {
     var aliens = {};
     var bulletOffset;
-    var enemyPositionTop = [];
-    var enemyPositionLeft = [];
-    var map = [[1,1,1,1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1,1,1,1],
-                [1,1,1,1,1,1,1,1,1,1,1]];
+    // var enemyPositionTop = [];
+    // var enemyPositionLeft = [];
+    // var aliens = [[1,6,11,16,21,26,31,36,41,46,51],
+    //             [2,7,12,17,22,27,32,37,42,47,52],
+    //             [3,8,13,18,23,28,33,38,43,48,53],
+    //             [4,9,14,19,24,29,34,39,44,49,54],
+    //             [5,10,15,20,25,30,35,45,50,55]];
 
-    function showAliens(map) {
-        for(var i = 0; i < map.length; i++) {
+
+    var aliens = [[{top: '0px', left: '0px'},{top: '0px', left: '50px'},{top: '0px', left: '100px'},{top: '0px', left: '150px'},{top: '0px', left: '200px'}],
+                [{top: '50px', left: '0px'},{top: '50px', left: '100px'},{top: '50px', left: '150px'},{top: '50px', left: '200px'},{top: '50px', left: '250px'}],
+                [{top: '100px', left: '0px'},{top: '100px', left: '50px'},{top: '100px', left: '150px'},{top: '100px', left: '150px'},{top: '100px', left: '200px'}],
+                [{top: '150px', left: '0px'},{top: '150px', left: '50px'},{top: '150px', left: '100px'},{top: '150px', left: '150px'},{top: '150px', left: '200px'}],
+                [{top: '200px', left: '0px'},{top: '200px', left: '50px'},{top: '200px', left: '100px'},{top: '200px', left: '150px'},{top: '200px', left: '200px'}]];
+
+    console.log(aliens);
+    console.log(aliens[1].length);
+
+    function showAliens(aliens) {
+        for(var i = 0; i < aliens.length; i++) {
+            console.log(i);
             $('.aliens-container').append('<div class="row' + i +'"></div>');
-            $.each(map[i], function(index, value) {
-                if(value != 0) {
-                    $('.row' + i).append('<div class="alien column' + index +'"></div>');
-                }
-            });
-        } 
+            for(var j = 0; j < aliens[i].length; j++) {
+                console.log(j);
+                $('.row' + i + '').append('<div class="alien column-'+ j +'"></div>');   
+            }
+        }
     }
-    showAliens(map);
+    showAliens(aliens);
 
     $(".alien").html('<img src="../alien1.png">');
 
@@ -89,15 +99,17 @@ $(function() {
         for(var alien in aliens) {
             var enemyOffset = aliens[alien];
 
-            enemyPositionTop = [];
+            var enemyPositionTop = [];
             for(var i = parseInt(enemyOffset.top); i <= enemyOffset.top+ 54; i++) {
                 enemyPositionTop.push(i);
             }
+            enemyOffset.outlineTop = enemyPositionTop;
 
-            enemyPositionLeft = [];
+            var enemyPositionLeft = [];
             for(var i = parseInt(enemyOffset.left); i <= enemyOffset.left+ 54; i++) {
                 enemyPositionLeft.push(i);
             }
+            enemyOffset.outlineLeft = enemyPositionLeft;
         }
     }
 
@@ -112,6 +124,7 @@ $(function() {
         var bulletMoving = setInterval(function() {
             renewPositionOfAlien();
             outlineAlienArea();
+            console.log(aliens);
             bulletOffset = $('.gunfire').offset();
             if(!checkIfHitAlien()) {
                 $('.gunfire').animate({top: "-=20"}, 10);
@@ -129,14 +142,13 @@ $(function() {
     }
 
     function checkIfHitAlien() {
-        // console.log(Object.keys(aliens).length, bulletOffset.top, enemyPositionTop);
-        console.log(aliens, enemyPositionTop[3]);
+        console.log(aliens(outlineLeft).length);
         for(var i = 0; i < Object.keys(aliens).length; i++) {
-            console.log(enemyPositionTop[i]);
-            if(bulletOffset.top == enemyPositionTop[i]) {
+            // console.log(enemyPositionTop[i]);
+            if(bulletOffset.top ) {
                 console.log("Enemy is -");
                 for (var i = 0; i < Object.keys(aliens).length; i++) {
-                    if(bulletOffset.left == enemyPositionLeft[i]) {
+                    if(bulletOffset.left) {
                         console.log("WIN");
                         return true;
                     }
