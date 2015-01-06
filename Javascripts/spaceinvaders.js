@@ -1,6 +1,6 @@
 $(function() {
     $('#noise')[0].play();
-    var activeDefenderShot = false;  // variable to check is there is existing bullet of defender
+    var activeDefenderShoot = false;  // variable to check is there is existing bullet of defender
     // var ifHit = false;
 
     // 1
@@ -75,15 +75,15 @@ $(function() {
     //make a shot
     $(document).keypress(function(e) {
         if(e.which == 32) {
-            if(!activeDefenderShot) {
-                createDefenderShot();
+            if(!activeDefenderShoot) {
+                createDefenderShoot();
             }
         }
     });
 
     //5
-    function createDefenderShot() {
-        activeDefenderShot = true;
+    function createDefenderShoot() {
+        activeDefenderShoot = true;
         $('#defenderGunShot')[0].play();
         $('.defender').append("<div class='gunfire'></div>");
         var timerMoveDEfenderBullet = setInterval(function() {
@@ -92,18 +92,18 @@ $(function() {
             if(parseInt($('.gunfire').css('top')) < -400) {
                 clearInterval(timerMoveDEfenderBullet);
                 $('.gunfire').remove();
-                activeDefenderShot = false;
+                activeDefenderShoot = false;
             }
-            else if(checkDefenderShot()) {
+            else if(checkDefenderShoot()) {
                 console.log("KILLED");
                 $('.gunfire').remove();
-                activeDefenderShot = false;
+                activeDefenderShoot = false;
                 clearInterval(timerMoveDEfenderBullet);
             }
         }, 0);
     }
 
-    function checkDefenderShot() {
+    function checkDefenderShoot() {
         var bulletPosition = $('.gunfire').offset();
         var bulletTop = parseInt(bulletPosition.top);
         var bulletLeft = parseInt(bulletPosition.left);
@@ -134,14 +134,86 @@ $(function() {
 
         var killedAlien = findKeyByValue(aliens, 'class', alien.class);
         delete aliens[killedAlien[0]][killedAlien[1]];
+
+        for(var i = 0; i < aliens.length; i++) {
+            console.log(typeof(aliens[i][0]), typeof(aliens[i][1]), typeof(aliens[i][2]));
+            if(typeof(aliens[i][0]) == 'undefined' && typeof(aliens[i][1]) == 'undefined' && typeof(aliens[i][2]) == 'undefined') {
+                aliens.splice([i], 1);
+            }
+        }
+        console.log(aliens);
     }
 
     function findKeyByValue(array, key, value) {
         for(var i = 0; i < array.length; i++) {
             for(var j = 0; j < array[i].length; j++)
-                if(array[i][j] != undefined && array[i][j].hasOwnProperty(key) && array[i][j][key] === value) {
-                    return [i, j];
+                if(array[i][j] != undefined && 
+                    array[i][j].hasOwnProperty(key) && 
+                    array[i][j][key] === value) {
+                        return [i, j];
                 }
         }
     }
+
+    // 6
+    function createAnAlienShoot() {
+        var attacker = findRandomAlien();
+        console.log(attacker);
+        $('.' + attacker.class + '').append("<div class='alien-bullet'></div>");
+
+        var alieenBulletMoving = setInterval(function() {
+
+            $('.alien-bullet').css({'top': "+=5"});
+
+            if(checkAlienShoot()) {
+                console.log("KILLED");
+                clearInterval(alieenBulletMoving);
+                $('.alien-bullet').remove();
+            }
+            var overshoot = $('.alien-bullet').offset();
+            if(overshoot.top > 745) {
+                console.log("OVERSHOOT");
+                clearInterval(alieenBulletMoving);
+                $('.alien-bullet').remove();
+            }
+            console.log("INTERVAL");
+        }, 50);
+    }
+
+    var alienAttack = setInterval(function() {
+        createAnAlienShoot();
+    }, 4000);
+
+    function findRandomAlien() {
+        var possibleAttackers = [];
+
+        for(var i = 0; i < aliens.length; i++) {
+            for(var j = 0; j < aliens[i].length; j++) {
+                if(aliens[i][j] != undefined) {
+                    possibleAttackers.push(aliens[i][j]);
+                }
+            }
+        }
+        var randomAttacker = Math.floor(Math.random() * possibleAttackers.length);
+        return possibleAttackers[randomAttacker];
+    }
+
+    function checkAlienShoot() {
+        var alienBulletPosition = $('.alien-bullet').offset();
+        var alienBulletTop = parseInt(alienBulletPosition.top);
+        var alienBulletLeft = parseInt(alienBulletPosition.left);
+
+        var defenderPosition = $('.defender').offset();
+        var defenderPositionTop = parseInt(defenderPosition.top);
+        var defenderPositionLeft = parseInt(defenderPosition.left);
+
+        if(alienBulletTop == defenderPositionTop || alienBulletTop > defenderPositionTop && alienBulletTop < defenderPositionTop + 10 ) {
+            if(alienBulletLeft == defenderPositionLeft || alienBulletLeft > defenderPositionLeft && alienBulletLeft < defenderPositionLeft + 5) {
+                console.log(alienBulletLeft, defenderPositionLeft);
+                alert("Defender is killed");
+                return true;
+            }
+        }
+    }
+
 });
