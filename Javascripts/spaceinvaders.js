@@ -1,5 +1,5 @@
 $(function() {
-    var activeDefenderShot = false;
+    var activeDefenderShot = false;  // variable to check is there is existing bullet of defender
     // var ifHit = false;
 
     // 1
@@ -10,10 +10,6 @@ $(function() {
                 [{'class':'c5r1'},{'class':'c5r2'},{'class':'c5r3'}],
                 [{'class':'c6r1'},{'class':'c6r2'},{'class':'c6r3'}],
                 [{'class':'c7r1'},{'class':'c7r2'},{'class':'c7r3'}]];
-
-    // var aliens = [[{'class':'c1r1'},{'class':'c2r1'},{'class':'c3r1'}, {'class':'c4r1'},{'class':'c5r1'},{'class':'c6r1'}, {'class':'c7r1'}],
-    //             [{'class':'c1r2'},{'class':'c2r2'},{'class':'c3r2'}, {'class':'c4r2'},{'class':'c5r2'},{'class':'c6r2'}, {'class':'c7r2'}],
-    //             [{'class':'c1r3'},{'class':'c2r3'},{'class':'c3r3'}, {'class':'c4r3'},{'class':'c5r3'},{'class':'c6r3'}, {'class':'c7r3'}]];
 
 
     function showAliens(aliens) {
@@ -32,9 +28,11 @@ $(function() {
         for(var i = 0; i < array.length; i++) {
             if(Array.isArray(array[i])) {
                 for(var j = 0; j < array[i].length; j++) {
-                    var domEl = $('.' + array[i][j].class + '');
-                    var position = $(domEl).offset();
-                    array[i][j].position = position;
+                    if(array[i][j] != undefined) {
+                        var domEl = $('.' + array[i][j].class + '');
+                        var position = $(domEl).offset();
+                        array[i][j].position = position;
+                    }
                 }
             }
         }
@@ -82,68 +80,52 @@ $(function() {
         }
     });
 
-    // 5
+    //5
     function createDefenderShot() {
         activeDefenderShot = true;
         $('.defender').append("<div class='gunfire'></div>");
         var timerMoveDEfenderBullet = setInterval(function() {
             $('.gunfire').css({'top': "-=1"});
-            if(checkIfAlienIsHit()) {
-                console.log("Alien is killed");
+
+            if(parseInt($('.gunfire').css('top')) < -400) {
                 clearInterval(timerMoveDEfenderBullet);
                 $('.gunfire').remove();
                 activeDefenderShot = false;
             }
-        }, 1);  
+            checkDefenderShot();
+        }, 0);
     }
 
-    function checkIfAlienIsHit() {
+    function checkDefenderShot() {
         var bulletPosition = $('.gunfire').offset();
         calculateAlienCurrentPosition(aliens);
-        // ifHit = false;
-        var num = 1;
-        
-        for (var i = 0; i < aliens.length; i++) {
-            var lastRow = calcualteAliensRowCoordinates(num);
-            var isHit = comparePositions(lastRow, bulletPosition, num);
-            console.log(isHit);
-            if(isHit != false) {
-                $('.' + isHit + '').html('').css('border', '1px solid red');
-                return true;
-            }
-            num++;
-        }
-    }
-
-    function calcualteAliensRowCoordinates(num) {
-        var lastRow = [];
 
         for(var i = 0; i < aliens.length; i++) {
-            var lastAlien = aliens[i][aliens[i].length - num];
-            lastRow.push(lastAlien);
-        }
-        return lastRow;
-    }
-
-    function comparePositions(lastRow, bulletPosition, num) {
-        var bulletTop = bulletPosition.top;
-        var bulletLeft = bulletPosition.left;
-        console.log(lastRow[0].position);
-
-        for(var i = 0; i < lastRow.length; i++) {
-            if(bulletTop === lastRow[i].position.top + 50) {
-                for(var j = 0; j < lastRow.length; j++) {
-                    if(bulletLeft == lastRow[j].position.left ||
-                        bulletLeft > lastRow[j].position.left && bulletLeft < lastRow[j].position.left + 50) {
-                        var killedAlien = lastRow[j].class;                        
-                        console.log(aliens);
-                        return killedAlien;
+            for(var j = 0; j < aliens[i].length; j++) {
+                if(bulletPosition.top == aliens[i][j].position.top + 50) {
+                    if(bulletPosition.left === aliens[i][j].position.left || 
+                    bulletPosition.left > aliens[i][j].position.left && bulletPosition.left < aliens[i][j].position.left + 50) {
+                        removeKilledAlien(aliens[i][j]);
+                        break;
                     }
                 }
             }
         }
-        return false;
     }
-        
 
+    function removeKilledAlien(alien) {
+        $("." + alien.class + "").html('');
+
+        var killedAlien = findKeyByValue(aliens, 'class', alien.class);
+        delete aliens[killedAlien[0]][killedAlien[1]];
+    }
+
+    function findKeyByValue(array, key, value) {
+        for(var i = 0; i < array.length; i++) {
+            for(var j = 0; j < array[i].length; j++)
+                if(array[i][j].hasOwnProperty(key) && array[i][j][key] === value) {
+                    return [i, j];
+                }
+        }
+    }
 });
