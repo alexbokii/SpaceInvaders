@@ -94,6 +94,7 @@ $(function() {
                 activeDefenderShot = false;
             }
             else if(checkDefenderShot()) {
+                console.log("KILLED");
                 $('.gunfire').remove();
                 activeDefenderShot = false;
                 clearInterval(timerMoveDEfenderBullet);
@@ -135,7 +136,7 @@ $(function() {
     function findKeyByValue(array, key, value) {
         for(var i = 0; i < array.length; i++) {
             for(var j = 0; j < array[i].length; j++)
-                if(array[i][j].hasOwnProperty(key) && array[i][j][key] === value) {
+                if(array[i][j] != undefined && array[i][j].hasOwnProperty(key) && array[i][j][key] === value) {
                     return [i, j];
                 }
         }
