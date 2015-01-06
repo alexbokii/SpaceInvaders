@@ -1,4 +1,5 @@
 $(function() {
+    $('#noise')[0].play();
     var activeDefenderShot = false;  // variable to check is there is existing bullet of defender
     // var ifHit = false;
 
@@ -86,7 +87,7 @@ $(function() {
         $('#defenderGunShot')[0].play();
         $('.defender').append("<div class='gunfire'></div>");
         var timerMoveDEfenderBullet = setInterval(function() {
-            $('.gunfire').css({'top': "-=1"});
+            $('.gunfire').css({'top': "-=5"});
 
             if(parseInt($('.gunfire').css('top')) < -400) {
                 clearInterval(timerMoveDEfenderBullet);
@@ -114,10 +115,12 @@ $(function() {
                 if(aliens[i][j] != undefined) {
                     var alienTop = parseInt(aliens[i][j].position.top);
                     var alienLeft = parseInt(aliens[i][j].position.left);
-                    if(bulletTop == alienTop + 50) {
+                    if(bulletTop == alienTop + 50 || 
+                        bulletTop < alienTop + 50 && bulletTop > alienTop) {
                         if(bulletLeft === alienLeft || 
                         bulletLeft > alienLeft && bulletLeft < alienLeft + 50) {
                             removeKilledAlien(aliens[i][j]);
+                            $('#goodShot')[0].play();
                             return true;
                         }
                     }
