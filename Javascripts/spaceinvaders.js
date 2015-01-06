@@ -162,27 +162,30 @@ $(function() {
         $('.' + attacker.class + '').append("<div class='alien-bullet'></div>");
 
         var alieenBulletMoving = setInterval(function() {
+            $('.alien-bullet').css({'top': "+=1"});
 
-            $('.alien-bullet').css({'top': "+=5"});
+            var overshoot = $('.alien-bullet').offset();
 
             if(checkAlienShoot()) {
                 console.log("KILLED");
-                clearInterval(alieenBulletMoving);
-                $('.alien-bullet').remove();
+                // $('.alien-bullet').remove();
+                stopBulletMoving();  
             }
-            var overshoot = $('.alien-bullet').offset();
-            if(overshoot.top > 745) {
+            else if(overshoot.top == 745 || overshoot.top > 745) {
                 console.log("OVERSHOOT");
-                clearInterval(alieenBulletMoving);
-                $('.alien-bullet').remove();
+                stopBulletMoving();  
             }
             console.log("INTERVAL");
-        }, 50);
+        }, 0);
+
+        function stopBulletMoving() {
+            clearInterval(alieenBulletMoving);
+            $('.alien-bullet').remove();
+            createAnAlienShoot();
+        }
     }
 
-    var alienAttack = setInterval(function() {
-        createAnAlienShoot();
-    }, 4000);
+    createAnAlienShoot();
 
     function findRandomAlien() {
         var possibleAttackers = [];
@@ -208,7 +211,7 @@ $(function() {
         var defenderPositionLeft = parseInt(defenderPosition.left);
 
         if(alienBulletTop == defenderPositionTop || alienBulletTop > defenderPositionTop && alienBulletTop < defenderPositionTop + 10 ) {
-            if(alienBulletLeft == defenderPositionLeft || alienBulletLeft > defenderPositionLeft && alienBulletLeft < defenderPositionLeft + 5) {
+            if(alienBulletLeft == defenderPositionLeft || alienBulletLeft > defenderPositionLeft && alienBulletLeft < defenderPositionLeft + 50) {
                 console.log(alienBulletLeft, defenderPositionLeft);
                 alert("Defender is killed");
                 return true;
