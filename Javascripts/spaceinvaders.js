@@ -1,7 +1,8 @@
 $(function() {
     $('#noise')[0].play();
     var activeDefenderShoot = false;  // variable to check is there is existing bullet of defender
-    // var ifHit = false;
+    var score = 0;
+    var lives = 3;
 
     // 1
     var aliens = [[{'class':'c1r1'},{'class':'c1r2'},{'class':'c1r3'}],
@@ -96,6 +97,8 @@ $(function() {
             }
             else if(checkDefenderShoot()) {
                 console.log("KILLED");
+                score += 1;
+                $('.score').html(score);
                 $('.gunfire').remove();
                 activeDefenderShoot = false;
                 clearInterval(timerMoveDEfenderBullet);
@@ -213,7 +216,11 @@ $(function() {
         if(alienBulletTop == defenderPositionTop || alienBulletTop > defenderPositionTop && alienBulletTop < defenderPositionTop + 10 ) {
             if(alienBulletLeft == defenderPositionLeft || alienBulletLeft > defenderPositionLeft && alienBulletLeft < defenderPositionLeft + 50) {
                 console.log(alienBulletLeft, defenderPositionLeft);
-                alert("Defender is killed");
+                lives -= 1;
+                $('.lives').html(lives);
+                if(lives == 0) {
+                    alert("Defender is killed");
+                }
                 return true;
             }
         }
